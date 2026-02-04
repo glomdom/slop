@@ -62,7 +62,9 @@ void Sha1::process_span(std::span<const std::byte> data) {
   }
 }
 
-void Sha1::finalize(std::array<std::byte, 20>& out_result) {
+[[nodiscard]] std::array<std::byte, 20> Sha1::finalize() {
+  std::array<std::byte, 20> result;
+
   std::uint64_t total_bits = m_count * 8;
   total_bits = std::byteswap(total_bits);
   
@@ -91,11 +93,13 @@ void Sha1::finalize(std::array<std::byte, 20>& out_result) {
 
   for (int i = 0; i < 5; ++i) {
     std::uint32_t val = std::byteswap(m_state[i]);
-    std::memcpy(&out_result[i * 4], &val, 4);
+    std::memcpy(&result[i * 4], &val, 4);
   }
+
+  return result;
 }
 
-static void swap_with_temp(std::uint32_t& a, std::uint32_t& b, std::uint32_t& c, std::uint32_t& d, std::uint32_t& e, std::uint32_t& temp) {
+inline static void swap_with_temp(std::uint32_t& a, std::uint32_t& b, std::uint32_t& c, std::uint32_t& d, std::uint32_t& e, std::uint32_t& temp) {
   e = d;
   d = c;
   c = std::rotl(b, 30);
@@ -104,7 +108,7 @@ static void swap_with_temp(std::uint32_t& a, std::uint32_t& b, std::uint32_t& c,
 }
 
 void Sha1::transform(std::span<const std::byte, 64> block) {
-  std::uint32_t W[80]{};
+  std::uint32_t W[80];
   std::uint32_t a{m_state[0]}, b{m_state[1]}, c{m_state[2]}, d{m_state[3]}, e{m_state[4]};
 
   for (int i = 0; i < 16; ++i) {

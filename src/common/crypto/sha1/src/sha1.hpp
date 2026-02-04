@@ -36,7 +36,7 @@ public:
     process_span(bytes);
   }
 
-  void finalize(std::array<std::byte, 20>& out_result);
+  [[nodiscard]] std::array<std::byte, 20> finalize();
 
 private:
   void process_span(std::span<const std::byte> data);

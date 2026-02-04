@@ -44,7 +44,7 @@ TEST_CASE("SHA-1 Golden Vectors") {
     SUBCASE("Empty String") {
         hasher = Sha1();
         hasher.update(std::string_view{""}); 
-        hasher.finalize(result);
+        result = hasher.finalize();
         
         CHECK(to_hex(result) == "da39a3ee5e6b4b0d3255bfef95601890afd80709");
     }
@@ -52,7 +52,7 @@ TEST_CASE("SHA-1 Golden Vectors") {
     SUBCASE("ABC") {
         hasher = Sha1();
         hasher.update(std::string_view{"abc"});
-        hasher.finalize(result);
+        result = hasher.finalize();
 
         CHECK(to_hex(result) == "a9993e364706816aba3e25717850c26c9cd0d89d");
     }
@@ -65,7 +65,7 @@ TEST_CASE("Generic Vectors") {
     SUBCASE("The Quick Brown Fox") {
         hasher = Sha1();
         hasher.update(std::string_view{"The quick brown fox jumps over the lazy dog"});
-        hasher.finalize(result);
+        result = hasher.finalize();
 
         CHECK(to_hex(result) == "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12");
     }
@@ -73,7 +73,7 @@ TEST_CASE("Generic Vectors") {
     SUBCASE("Padding Logic Check (56 bytes)") {
         hasher = Sha1();
         hasher.update(std::string_view{"abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq"});
-        hasher.finalize(result);
+        result = hasher.finalize();
 
         CHECK(to_hex(result) == "84983e441c3bd26ebaae4aa1f95129e5e54670f1");
     }
@@ -82,7 +82,7 @@ TEST_CASE("Generic Vectors") {
         std::string input(64, 'a');
         hasher = Sha1();
         hasher.update(input);
-        hasher.finalize(result);
+        result = hasher.finalize();
 
         CHECK(to_hex(result) == "0098ba824b5c16427bd7a1122a5a442a25ec644d");
     }
@@ -91,7 +91,7 @@ TEST_CASE("Generic Vectors") {
         std::string input(65, 'a');
         hasher = Sha1();
         hasher.update(input);
-        hasher.finalize(result);
+        result = hasher.finalize();
 
         CHECK(to_hex(result) == "11655326c708d70319be2610e8a57d9a5b959d3b");
     }
@@ -107,7 +107,7 @@ TEST_CASE("Generic Vectors") {
         hasher.update(std::string_view{"the "});
         hasher.update(std::string_view{"lazy "});
         hasher.update(std::string_view{"dog"});
-        hasher.finalize(result);
+        result = hasher.finalize();
 
         CHECK(to_hex(result) == "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12");
     }
@@ -116,7 +116,7 @@ TEST_CASE("Generic Vectors") {
         std::string input(1'000'000, 'a');
         hasher = Sha1();
         hasher.update(input);
-        hasher.finalize(result);
+        result = hasher.finalize();
 
         CHECK(to_hex(result) == "34aa973cd4c4daa4f61eeb2bdbad27316534016f");
     }

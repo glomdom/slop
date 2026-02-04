@@ -17,30 +17,10 @@
 
 */
 
-#include <array>
-#include <cstddef>
-#include <format>
-#include <iostream>
 #include <print>
-
-#include <sha1.hpp>
-#include <string_view>
 
 int main(int argc, char** argv) {
   std::println("Hello, {}!", "world");
-
-  std::string_view input{"abc"};
-  auto hasher = Sha1{};
-  hasher.update(input);
-
-  std::array<std::byte, 20> result;
-  hasher.finalize(result);
-
-  for (auto b : result) {
-    std::cout << std::format("{:02x}", (std::uint8_t)b);
-  }
-
-  std::println();
 
   return 0;
 }
