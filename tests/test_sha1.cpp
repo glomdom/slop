@@ -72,4 +72,47 @@ TEST_CASE("SHA-1 Golden Vectors") {
 
         CHECK(to_hex(result) == "84983e441c3bd26ebaae4aa1f95129e5e54670f1");
     }
+
+    SUBCASE("Exact Block Size (64 bytes)") {
+        std::string input(64, 'a');
+        hasher = Sha1();
+        hasher.update(input);
+        hasher.finalize(result);
+
+        CHECK(to_hex(result) == "0098ba824b5c16427bd7a1122a5a442a25ec644d");
+    }
+
+    SUBCASE("Block Boundary + 1 (65 bytes)") {
+        std::string input(65, 'a');
+        hasher = Sha1();
+        hasher.update(input);
+        hasher.finalize(result);
+
+        CHECK(to_hex(result) == "11655326c708d70319be2610e8a57d9a5b959d3b");
+    }
+
+    SUBCASE("Streaming / Incremental Updates") {
+        hasher = Sha1();
+        hasher.update(std::string_view{"The "});
+        hasher.update(std::string_view{"quick "});
+        hasher.update(std::string_view{"brown "});
+        hasher.update(std::string_view{"fox "});
+        hasher.update(std::string_view{"jumps "});
+        hasher.update(std::string_view{"over "});
+        hasher.update(std::string_view{"the "});
+        hasher.update(std::string_view{"lazy "});
+        hasher.update(std::string_view{"dog"});
+        hasher.finalize(result);
+
+        CHECK(to_hex(result) == "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12");
+    }
+
+    SUBCASE("One Million 'a's") {
+        std::string input(1'000'000, 'a');
+        hasher = Sha1();
+        hasher.update(input);
+        hasher.finalize(result);
+
+        CHECK(to_hex(result) == "34aa973cd4c4daa4f61eeb2bdbad27316534016f");
+    }
 }
