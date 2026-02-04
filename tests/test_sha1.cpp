@@ -49,13 +49,18 @@ TEST_CASE("SHA-1 Golden Vectors") {
         CHECK(to_hex(result) == "da39a3ee5e6b4b0d3255bfef95601890afd80709");
     }
 
-    SUBCASE("ABC (The Classic)") {
+    SUBCASE("ABC") {
         hasher = Sha1();
         hasher.update(std::string_view{"abc"});
         hasher.finalize(result);
 
         CHECK(to_hex(result) == "a9993e364706816aba3e25717850c26c9cd0d89d");
     }
+}
+
+TEST_CASE("Generic Vectors") {
+    Sha1 hasher;
+    std::array<std::byte, 20> result;
 
     SUBCASE("The Quick Brown Fox") {
         hasher = Sha1();
