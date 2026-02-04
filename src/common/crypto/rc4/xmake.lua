@@ -17,8 +17,8 @@
 
 ]]--
 
-target("slop")
-    set_kind("binary")
+target("rc4")
+    set_kind("static")
 
-    add_deps("crypto")
     add_files("src/*.cpp")
+    add_includedirs("src/", { public = true })

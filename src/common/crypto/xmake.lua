@@ -18,3 +18,8 @@
 ]]--
 
 includes("sha1")
+includes("rc4")
+
+target("crypto")
+    set_kind("phony")
+    add_deps("rc4", "sha1")
