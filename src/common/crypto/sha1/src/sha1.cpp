@@ -95,6 +95,14 @@ void Sha1::finalize(std::array<std::byte, 20>& out_result) {
   }
 }
 
+static void swap_with_temp(std::uint32_t& a, std::uint32_t& b, std::uint32_t& c, std::uint32_t& d, std::uint32_t& e, std::uint32_t& temp) {
+  e = d;
+  d = c;
+  c = std::rotl(b, 30);
+  b = a;
+  a = temp;
+}
+
 void Sha1::transform(std::span<const std::byte, 64> block) {
   std::uint32_t W[80]{};
   std::uint32_t a{m_state[0]}, b{m_state[1]}, c{m_state[2]}, d{m_state[3]}, e{m_state[4]};
@@ -117,44 +125,28 @@ void Sha1::transform(std::span<const std::byte, 64> block) {
   for (int i = 0; i < 20; i++) {
     std::uint32_t temp = std::rotl(a, 5) + ((b & c) | (~b & d)) + e + 0x5A827999 + W[i];
 
-    e = d;
-    d = c;
-    c = std::rotl(b, 30);
-    b = a;
-    a = temp;
+    swap_with_temp(a, b, c, d, e, temp);
   }
 
   // iter 2
   for (int i = 20; i < 40; i++) {
     std::uint32_t temp = std::rotl(a, 5) + (b ^ c ^ d) + e + 0x6ED9EBA1 + W[i];
 
-    e = d;
-    d = c;
-    c = std::rotl(b, 30);
-    b = a;
-    a = temp;
+    swap_with_temp(a, b, c, d, e, temp);
   }
 
   // iter 3
   for (int i = 40; i < 60; i++) {
     std::uint32_t temp = std::rotl(a, 5) + ((b & c) | (b & d) | (c & d)) + e + 0x8F1BBCDC + W[i];
 
-    e = d;
-    d = c;
-    c = std::rotl(b, 30);
-    b = a;
-    a = temp;
+    swap_with_temp(a, b, c, d, e, temp);
   }
 
   // iter 4
   for (int i = 60; i < 80; i++) {
     std::uint32_t temp = std::rotl(a, 5) + (b ^ c ^ d) + e + 0xCA62C1D6 + W[i];
 
-    e = d;
-    d = c;
-    c = std::rotl(b, 30);
-    b = a;
-    a = temp;
+    swap_with_temp(a, b, c, d, e, temp);
   }
 
   m_state[0] += a;
