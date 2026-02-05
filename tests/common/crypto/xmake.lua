@@ -17,12 +17,8 @@
 
 ]]--
 
-add_requires("doctest")
-add_packages("doctest")
+target("crypto_tests")
+    set_kind("object")
 
-includes("common")
-
-target("tests")
-    set_kind("binary")
-    add_deps("crypto_tests")
-    add_files("main.cpp")
+    add_files("test_*.cpp")
+    add_deps("sha1")
