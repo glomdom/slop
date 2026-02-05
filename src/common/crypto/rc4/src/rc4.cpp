@@ -17,4 +17,24 @@
 
 */
 
-#include "rc4.hpp"
+#include <cstddef>
+#include <utility>
+
+#include <rc4/rc4.hpp>
+
+namespace slop::crypto {
+
+void RC4::apply(std::span<std::byte> data) noexcept {
+  for (std::byte& b : data) {
+    m_i += 1;
+    m_j += std::to_integer<std::uint8_t>(m_state[m_i]);
+
+    std::swap(m_state[m_i], m_state[m_j]);
+
+    std::uint8_t key_byte_idx = std::to_integer<std::uint8_t>(m_state[m_i]) + std::to_integer<std::uint8_t>(m_state[m_j]);
+    std::byte key_byte = m_state[key_byte_idx];
+    b = b ^ key_byte;
+  }
+}
+
+}

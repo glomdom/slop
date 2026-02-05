@@ -17,4 +17,44 @@
 
 */
 
-class RC4 {};
+#pragma once
+
+#include <cstddef>
+#include <span>
+#include <utility>
+#include <stdexcept>
+
+#include <concepts/bytes.hpp>
+
+namespace slop::crypto {
+
+class RC4 {
+public:
+  explicit RC4(const slop::concepts::ContiguousBytes auto& key) {
+    if (key.size() == 0) {
+      throw std::runtime_error("provided key to RC4 is 0-length.");
+    }
+
+    std::uint8_t j{};
+
+    for (int i = 0; i < 256; i++) {
+      j += std::to_integer<std::uint8_t>(m_state[i]);
+      j += static_cast<std::uint8_t>(key[i % key.size()]);
+
+      std::swap(m_state[i], m_state[j]);
+    }
+  }
+
+  void apply(std::span<std::byte> data) noexcept;
+
+private:
+  template <typename T, std::size_t... IndexSequence>
+  static constexpr std::array<T, sizeof...(IndexSequence)> make_sequenced_array(std::index_sequence<IndexSequence...>) {
+    return { static_cast<T>(IndexSequence)... };
+  }
+
+  std::array<std::byte, 256> m_state = make_sequenced_array<std::byte>(std::make_index_sequence<256>{});
+  std::uint8_t m_i{0}, m_j{0};
+};
+
+}

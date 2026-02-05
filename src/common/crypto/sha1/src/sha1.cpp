@@ -38,7 +38,7 @@ void Sha1::process_span(std::span<const std::byte> data) {
     if (remaining < space_left) {
       std::memcpy(m_buffer + fill, current, remaining);
       m_count += remaining;
-      
+
       return;
     }
 
@@ -69,10 +69,10 @@ void Sha1::process_span(std::span<const std::byte> data) {
 
   std::uint64_t total_bits = m_count * 8;
   total_bits = std::byteswap(total_bits);
-  
+
   std::byte end_mark{0x80};
   update(std::span(&end_mark, 1));
-  
+
   std::uint64_t current_mod = m_count % 64;
   std::uint64_t zeros_needed;
 
@@ -82,7 +82,7 @@ void Sha1::process_span(std::span<const std::byte> data) {
     zeros_needed = (64 - current_mod) + 56;
   }
 
-  static const std::byte zero_pad[64]{}; 
+  static const std::byte zero_pad[64]{};
   while (zeros_needed > 0) {
     std::size_t chunk = std::min(zeros_needed, sizeof(zero_pad));
     update(std::span(zero_pad, chunk));
