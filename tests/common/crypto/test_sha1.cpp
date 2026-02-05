@@ -25,7 +25,7 @@
 #include <string>
 #include <string_view>
 
-#include <sha1.hpp>
+#include <sha1/sha1.hpp>
 
 using namespace slop::crypto;
 

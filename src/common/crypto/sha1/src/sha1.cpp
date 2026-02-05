@@ -17,7 +17,7 @@
 
 */
 
-#include "sha1.hpp"
+#include <sha1/sha1.hpp>
 
 #include <bit>
 #include <cstdint>
