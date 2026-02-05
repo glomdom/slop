@@ -24,6 +24,8 @@
 #include <cstring>
 #include <span>
 
+namespace slop::crypto {
+
 void Sha1::process_span(std::span<const std::byte> data) {
   auto current = data.data();
   auto remaining = data.size();
@@ -158,4 +160,6 @@ void Sha1::transform(std::span<const std::byte, 64> block) {
   m_state[2] += c;
   m_state[3] += d;
   m_state[4] += e;
+}
+
 }

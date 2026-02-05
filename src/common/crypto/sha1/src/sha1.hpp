@@ -23,11 +23,14 @@
 #include <cstddef>
 #include <cstdint>
 #include <span>
+
 #include <concepts/bytes.hpp>
+
+namespace slop::crypto {
 
 class Sha1 {
 public:
-  void update(const ContiguousBytes auto& data) {
+  void update(const slop::concepts::ContiguousBytes auto& data) {
     auto bytes = std::as_bytes(std::span{data});
 
     process_span(bytes);
@@ -43,3 +46,5 @@ private:
   std::uint64_t m_count{0};
   std::byte m_buffer[64]{};
 };
+
+}

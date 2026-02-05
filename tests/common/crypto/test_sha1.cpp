@@ -27,6 +27,8 @@
 
 #include <sha1.hpp>
 
+using namespace slop::crypto;
+
 std::string to_hex(const std::array<std::byte, 20>& hash) {
   std::string out;
   for (auto b : hash) {
