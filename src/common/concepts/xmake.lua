@@ -17,9 +17,7 @@
 
 ]]--
 
-target("sha1")
-    set_kind("static")
+target("concepts")
+    set_kind("headeronly")
 
-    add_files("src/*.cpp")
-    add_deps("concepts")
     add_includedirs("src/", { public = true })

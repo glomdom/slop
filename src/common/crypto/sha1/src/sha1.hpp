@@ -22,11 +22,8 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
-#include <ranges>
 #include <span>
-
-template <typename T>
-concept ContiguousBytes = std::ranges::contiguous_range<T> && (sizeof(std::ranges::range_value_t<T>) == 1);
+#include <concepts/bytes.hpp>
 
 class Sha1 {
 public:
