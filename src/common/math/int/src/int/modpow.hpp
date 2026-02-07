@@ -19,6 +19,7 @@
 
 #include <boost/multiprecision/integer.hpp>
 
+#include <limits>
 #include <stdexcept>
 #include <type_traits>
 
@@ -29,7 +30,9 @@ namespace mp = boost::multiprecision;
 namespace slop::math {
 
 static constexpr auto mod_pow(concepts::Integer auto const& base, concepts::Integer auto const& exp, concepts::Integer auto const& mod) {
-    if constexpr (std::is_signed_v<decltype(mod)>) {
+    using ModType = std::remove_cvref_t<decltype(mod)>;
+
+    if constexpr (std::numeric_limits<ModType>::is_signed) {
         if (mod <= 0) {
             throw std::invalid_argument("slop::math::int#modpow: provided modulus is non-positive.");
         }
@@ -41,7 +44,7 @@ static constexpr auto mod_pow(concepts::Integer auto const& base, concepts::Inte
         result += mod;
     }
 
-    return static_cast<std::decay_t<decltype(mod)>>(result);
+    return static_cast<ModType>(result);
 }
 
 }

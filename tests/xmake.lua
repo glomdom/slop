@@ -20,6 +20,10 @@
 add_requires("doctest")
 add_packages("doctest")
 
+local data_dir = os.projectdir() .. "/tests/common/crypto/data"
+local real = string.replace(data_dir, "\\", "/")
+add_defines("TEST_DATA_DIR=\"" .. real .. "\"")
+
 includes("common")
 
 target("tests")

@@ -21,4 +21,5 @@ target("crypto_tests")
     set_kind("object")
 
     add_files("test_*.cpp")
-    add_deps("sha1", "rc4")
+    add_deps("sha1", "rc4", "srp6")
+    add_packages("boost")

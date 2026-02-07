@@ -29,7 +29,7 @@
 
 using namespace slop::crypto;
 
-std::string to_hex(const std::vector<std::byte>& bytes) {
+static std::string to_hex(const std::vector<std::byte>& bytes) {
   std::string out;
   for (auto b : bytes) {
     out += std::format("{:02x}", std::to_integer<int>(b));

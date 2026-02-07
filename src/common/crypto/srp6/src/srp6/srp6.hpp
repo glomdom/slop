@@ -16,3 +16,19 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
+
+#pragma once
+
+#include <array>
+#include <cstddef>
+#include <span>
+#include <string>
+
+namespace slop::crypto {
+
+class SRP6 {
+public:
+  std::array<std::byte, 20> calculate_x(std::string username, std::string password, std::span<std::byte, 32> salt);
+};
+
+}

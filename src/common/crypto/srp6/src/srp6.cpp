@@ -17,4 +17,23 @@
 
 */
 
-#include "srp6.hpp"
+#include "srp6/srp6.hpp"
+
+#include <sha1/sha1.hpp>
+
+namespace slop::crypto {
+
+std::array<std::byte, 20> SRP6::calculate_x(std::string username, std::string password, std::span<std::byte, 32> salt) {
+  auto interim_hasher = Sha1();
+  interim_hasher.update(username + ":" + password);
+  auto interim = interim_hasher.finalize();
+
+  auto result_hasher = Sha1();
+  result_hasher.update(salt);
+  result_hasher.update(interim);
+  auto result = result_hasher.finalize();
+
+  return result;
+}
+
+}
