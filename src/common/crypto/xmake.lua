@@ -19,7 +19,8 @@
 
 includes("sha1")
 includes("rc4")
+includes("srp6")
 
 target("crypto")
     set_kind("phony")
-    add_deps("rc4", "sha1")
+    add_deps("rc4", "sha1", "srp6")

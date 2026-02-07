@@ -18,9 +18,42 @@
 */
 
 #include <print>
+#include <boost/multiprecision/cpp_int.hpp>
+#include <int/modpow.hpp>
+
+// #include <asio.hpp>
+
+// class AsyncClient {
+//   asio::io_context& m_ctx;
+//   asio::ip::tcp::socket m_socket;
+
+// public:
+//   AsyncClient(asio::io_context& ctx) : m_ctx(ctx), m_socket(ctx) {}
+
+//   asio::awaitable<void> run(std::string host, std::string port) {
+//     auto resolver = asio::ip::tcp::resolver(m_ctx);
+//     auto endpoints = co_await resolver.async_resolve("127.0.0.1", "6767", asio::use_awaitable);
+
+//     co_await asio::async_connect(m_socket, endpoints, asio::use_awaitable);
+//     co_await read_loop();
+//   }
+
+// private:
+//   asio::awaitable<void> read_loop() {
+//     while (true) {
+
+//     }
+//   }
+// };
 
 int main(int argc, char** argv) {
-  std::println("Hello, {}!", "world");
+  boost::multiprecision::int256_t a{-2};
+  boost::multiprecision::int256_t b{3};
+  boost::multiprecision::int256_t lsp{9};
+
+  auto c = slop::math::mod_pow(a, b, lsp);
+
+  std::println("Hello, {}!", c.convert_to<std::string>());
 
   return 0;
 }

@@ -1,4 +1,4 @@
---[[
+/*
 
   Copyright (C) 2026 glomdom
 
@@ -15,6 +15,4 @@
   You should have received a copy of the GNU Affero General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-]]--
-
-includes("crypto")
+*/

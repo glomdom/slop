@@ -17,8 +17,11 @@
 
 ]]--
 
+add_requires("asio")
+
 target("slop")
     set_kind("binary")
 
-    add_deps("crypto")
+    add_deps("crypto", "math")
+    add_packages("asio", "boost")
     add_files("src/*.cpp")

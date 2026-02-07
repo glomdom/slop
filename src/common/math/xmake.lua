@@ -17,4 +17,8 @@
 
 ]]--
 
-includes("crypto")
+includes("int")
+
+target("math")
+    set_kind("phony")
+    add_deps("int")

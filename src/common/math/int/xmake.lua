@@ -17,4 +17,9 @@
 
 ]]--
 
-includes("crypto")
+target("int")
+    set_kind("headeronly")
+
+    add_packages("boost")
+    add_deps("concepts")
+    add_includedirs("src/", { public = true })

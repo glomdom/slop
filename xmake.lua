@@ -23,6 +23,8 @@ add_rules("plugin.compile_commands.autoupdate", { outputdir="build" })
 set_languages("c++26")
 set_toolchains("clang")
 
+add_requires("boost", { configs = { all = true } })
+
 if is_mode("release") then
     set_warnings("all", "error")
     set_policy("build.optimization.lto", true)

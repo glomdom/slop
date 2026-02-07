@@ -1,4 +1,4 @@
---[[
+/*
 
   Copyright (C) 2026 glomdom
 
@@ -15,6 +15,25 @@
   You should have received a copy of the GNU Affero General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-]]--
+*/
 
-includes("crypto")
+#include <boost/multiprecision/integer.hpp>
+
+#include <concepts/ints.hpp>
+
+namespace mp = boost::multiprecision;
+
+namespace slop::math {
+
+template <concepts::GenericInteger TBase, concepts::GenericInteger TExponent, concepts::GenericInteger TMod>
+static constexpr auto mod_pow(const TBase& base, const TExponent& exp, const TMod& mod) {
+    auto result = mp::powm(base, exp, mod);
+
+    if (result < 0) {
+        result += mod;
+    }
+
+    return static_cast<TMod>(result);
+}
+
+}
