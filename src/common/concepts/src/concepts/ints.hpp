@@ -24,6 +24,6 @@
 namespace slop::concepts {
 
 template <typename T>
-concept GenericInteger = std::numeric_limits<T>::is_integer;
+concept Integer = std::numeric_limits<T>::is_integer;
 
 }

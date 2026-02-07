@@ -19,21 +19,29 @@
 
 #include <boost/multiprecision/integer.hpp>
 
+#include <stdexcept>
+#include <type_traits>
+
 #include <concepts/ints.hpp>
 
 namespace mp = boost::multiprecision;
 
 namespace slop::math {
 
-template <concepts::GenericInteger TBase, concepts::GenericInteger TExponent, concepts::GenericInteger TMod>
-static constexpr auto mod_pow(const TBase& base, const TExponent& exp, const TMod& mod) {
+static constexpr auto mod_pow(concepts::Integer auto const& base, concepts::Integer auto const& exp, concepts::Integer auto const& mod) {
+    if constexpr (std::is_signed_v<decltype(mod)>) {
+        if (mod <= 0) {
+            throw std::invalid_argument("slop::math::int#modpow: provided modulus is non-positive.");
+        }
+    }
+
     auto result = mp::powm(base, exp, mod);
 
     if (result < 0) {
         result += mod;
     }
 
-    return static_cast<TMod>(result);
+    return static_cast<std::decay_t<decltype(mod)>>(result);
 }
 
 }
