@@ -65,7 +65,7 @@ void Sha1::process_span(std::span<const std::byte> data) {
 }
 
 [[nodiscard]] std::array<std::byte, 20> Sha1::finalize() {
-  std::array<std::byte, 20> result;
+  std::array<std::byte, 20> result{};
 
   std::uint64_t total_bits = m_count * 8;
   total_bits = std::byteswap(total_bits);
@@ -101,17 +101,9 @@ void Sha1::process_span(std::span<const std::byte> data) {
   return result;
 }
 
-inline static void swap_with_temp(std::uint32_t& a, std::uint32_t& b, std::uint32_t& c, std::uint32_t& d, std::uint32_t& e, std::uint32_t& temp) {
-  e = d;
-  d = c;
-  c = std::rotl(b, 30);
-  b = a;
-  a = temp;
-}
-
 void Sha1::transform(std::span<const std::byte, 64> block) {
   std::uint32_t W[80];
-  std::uint32_t a{m_state[0]}, b{m_state[1]}, c{m_state[2]}, d{m_state[3]}, e{m_state[4]};
+  auto a{m_state[0]}, b{m_state[1]}, c{m_state[2]}, d{m_state[3]}, e{m_state[4]};
 
   for (int i = 0; i < 16; ++i) {
     std::uint32_t raw;
@@ -121,38 +113,54 @@ void Sha1::transform(std::span<const std::byte, 64> block) {
   }
 
   for (int i = 16; i < 80; i++) {
-    std::uint32_t w1{W[i - 3]}, w2{W[i - 8]}, w3{W[i - 14]}, w4{W[i - 16]};
-    std::uint32_t xored = w1 ^ w2 ^ w3 ^ w4;
+    const auto w1{W[i - 3]}, w2{W[i - 8]}, w3{W[i - 14]}, w4{W[i - 16]};
+    const auto xored = w1 ^ w2 ^ w3 ^ w4;
 
     W[i] = std::rotl(xored, 1);
   }
 
   // iter 1
   for (int i = 0; i < 20; i++) {
-    std::uint32_t temp = std::rotl(a, 5) + ((b & c) | (~b & d)) + e + 0x5A827999 + W[i];
+    const auto temp = std::rotl(a, 5) + ((b & c) | (~b & d)) + e + 0x5A827999 + W[i];
 
-    swap_with_temp(a, b, c, d, e, temp);
+    e = d;
+    d = c;
+    c = std::rotl(b, 30);
+    b = a;
+    a = temp;
   }
 
   // iter 2
   for (int i = 20; i < 40; i++) {
-    std::uint32_t temp = std::rotl(a, 5) + (b ^ c ^ d) + e + 0x6ED9EBA1 + W[i];
+    const auto temp = std::rotl(a, 5) + (b ^ c ^ d) + e + 0x6ED9EBA1 + W[i];
 
-    swap_with_temp(a, b, c, d, e, temp);
+    e = d;
+    d = c;
+    c = std::rotl(b, 30);
+    b = a;
+    a = temp;
   }
 
   // iter 3
   for (int i = 40; i < 60; i++) {
-    std::uint32_t temp = std::rotl(a, 5) + ((b & c) | (b & d) | (c & d)) + e + 0x8F1BBCDC + W[i];
+    const auto temp = std::rotl(a, 5) + ((b & c) | (b & d) | (c & d)) + e + 0x8F1BBCDC + W[i];
 
-    swap_with_temp(a, b, c, d, e, temp);
+    e = d;
+    d = c;
+    c = std::rotl(b, 30);
+    b = a;
+    a = temp;
   }
 
   // iter 4
   for (int i = 60; i < 80; i++) {
-    std::uint32_t temp = std::rotl(a, 5) + (b ^ c ^ d) + e + 0xCA62C1D6 + W[i];
+    const auto temp = std::rotl(a, 5) + (b ^ c ^ d) + e + 0xCA62C1D6 + W[i];
 
-    swap_with_temp(a, b, c, d, e, temp);
+    e = d;
+    d = c;
+    c = std::rotl(b, 30);
+    b = a;
+    a = temp;
   }
 
   m_state[0] += a;

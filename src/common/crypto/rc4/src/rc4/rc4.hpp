@@ -30,7 +30,7 @@ namespace slop::crypto {
 
 class RC4 {
 public:
-  explicit RC4(const slop::concepts::ContiguousBytes auto& key) {
+  explicit RC4(const concepts::ContiguousBytes auto& key) {
     if (key.size() == 0) {
       throw std::runtime_error("provided key to RC4 is 0-length.");
     }

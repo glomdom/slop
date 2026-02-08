@@ -28,7 +28,7 @@ namespace slop::crypto {
 
 class SRP6 {
 public:
-  std::array<std::byte, 20> calculate_x(std::string username, std::string password, std::span<std::byte, 32> salt);
+  static std::array<std::byte, 20> calculate_x(const std::string& username, const std::string& password, std::span<std::byte, 32> salt);
 };
 
 }

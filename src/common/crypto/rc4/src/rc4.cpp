@@ -18,7 +18,6 @@
 */
 
 #include <cstddef>
-#include <utility>
 
 #include <rc4/rc4.hpp>
 
@@ -31,8 +30,8 @@ void RC4::apply(std::span<std::byte> data) noexcept {
 
     std::swap(m_state[m_i], m_state[m_j]);
 
-    std::uint8_t key_byte_idx = std::to_integer<std::uint8_t>(m_state[m_i]) + std::to_integer<std::uint8_t>(m_state[m_j]);
-    std::byte key_byte = m_state[key_byte_idx];
+    const std::uint8_t key_byte_idx = std::to_integer<std::uint8_t>(m_state[m_i]) + std::to_integer<std::uint8_t>(m_state[m_j]);
+    const std::byte key_byte = m_state[key_byte_idx];
     b = b ^ key_byte;
   }
 }
