@@ -17,8 +17,9 @@
 
 ]]--
 
-includes("int")
-
 target("math")
-    set_kind("phony")
-    add_deps("int")
+    set_kind("static")
+
+    add_packages("boost")
+    add_deps("concepts")
+    add_includedirs("src/", { public = true })

@@ -20,18 +20,35 @@
 #include "srp6/srp6.hpp"
 
 #include <sha1/sha1.hpp>
+#include <int/modpow.hpp>
+
+namespace mp = boost::multiprecision;
 
 namespace slop::crypto {
 
-std::array<std::byte, 20> SRP6::calculate_x(const std::string& username, const std::string& password, const std::span<std::byte, 32> salt) {
+std::array<std::byte, 20> SRP6::calculate_x() const {
   auto interim_hasher = Sha1();
-  interim_hasher.update(username + ":" + password);
+  interim_hasher.update(m_username + ":" + m_password);
   const auto interim = interim_hasher.finalize();
 
   auto result_hasher = Sha1();
-  result_hasher.update(salt);
+  result_hasher.update(m_salt);
   result_hasher.update(interim);
   const auto result = result_hasher.finalize();
+
+  return result;
+}
+
+std::array<std::byte, 32> SRP6::calculate_password_verifier() const {
+  const auto x = calculate_x();
+
+  mp::uint256_t x_int;
+  mp::import_bits(x_int, x.begin(), x.end(), 8, false);
+
+  const auto result_int = math::mod_pow(GENERATOR, x_int, LARGE_SAFE_PRIME);
+
+  std::array<std::byte, 32> result{};
+  mp::export_bits(result_int, reinterpret_cast<unsigned char*>(result.data()), 8, false);
 
   return result;
 }

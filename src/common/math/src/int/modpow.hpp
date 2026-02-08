@@ -17,11 +17,13 @@
 
 */
 
-#include <boost/multiprecision/integer.hpp>
+#pragma once
 
 #include <limits>
 #include <stdexcept>
 #include <type_traits>
+
+#include <boost/multiprecision/integer.hpp>
 
 #include <concepts/ints.hpp>
 

@@ -21,6 +21,6 @@ target("srp6")
     set_kind("static")
 
     add_files("src/*.cpp")
-    add_deps("concepts", "sha1")
+    add_deps("concepts", "sha1", "math")
     add_packages("boost")
     add_includedirs("src/", { public = true })
