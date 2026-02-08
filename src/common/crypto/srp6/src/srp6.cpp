@@ -23,15 +23,15 @@
 
 namespace slop::crypto {
 
-std::array<std::byte, 20> SRP6::calculate_x(const std::string& username, const std::string& password, std::span<std::byte, 32> salt) {
+std::array<std::byte, 20> SRP6::calculate_x(const std::string& username, const std::string& password, const std::span<std::byte, 32> salt) {
   auto interim_hasher = Sha1();
   interim_hasher.update(username + ":" + password);
-  auto interim = interim_hasher.finalize();
+  const auto interim = interim_hasher.finalize();
 
   auto result_hasher = Sha1();
   result_hasher.update(salt);
   result_hasher.update(interim);
-  auto result = result_hasher.finalize();
+  const auto result = result_hasher.finalize();
 
   return result;
 }
